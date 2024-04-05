@@ -3,7 +3,8 @@
 # Only return the final answer, the content of introduction
 # Always list all parts of the report.
 # Write the introduction as a paragraph or multiple paragraphs and not only list the title
-# The language is not necessarily English
+# The language is not necessarily English.
+## MUST use the same language as language of the "idea of introduction"
 
 
 Report layout: {{$reportLayout}}

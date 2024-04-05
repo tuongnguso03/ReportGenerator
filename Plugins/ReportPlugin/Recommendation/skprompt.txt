@@ -1,11 +1,13 @@
 # You are master in writing the recommendation in a report. Base on the provided shortlisted content and idea of recommendation, write a professional recommendation section for the report.
-# Always using the same language as language of the "Idea of recommendation"
 # Only return the final answer, the content of recommendation
-# Always list all parts of the report.
-# Write the recommendation as a paragraph or multiple paragraphs and not only list the title
+# Write the recommendation as a paragraph or multiple paragraphs.
 ## Write as long as possible. At least 2000 words.
+## MUST use the same language as language of the "Idea of recommendation". For example, if it is in Hindi, use Hindi; if it is in Vietnamese, use Vietnamese.
 
 
 
 Summarized Content: {{$summContent}}
 Idea of recommendation: {{$recommendation}}
+
+## MUST use the same language as language of the "Idea of recommendation". For example, if it is in Hindi, use Hindi; if it is in Vietnamese, use Vietnamese.
+
