@@ -6,7 +6,7 @@
 ## Always including only 4 parts: Introduction, Body, Conclusion, Recommendations.
 
 ## Always put the answer in JSON format like the example below. Do not break new lines, all content should be in one line:
-{'report': {'title': 'Title of Report','introduction': 'Introduction content','body': {'headings': ['1. Heading 1','2. Heading 2',... 'n. Heading n']}, 'conclusion': 'Conclusions','recommendations': 'Recommendations'}}
+{'report': {'title': 'Title of Report','introduction': 'Introduction content','body': {'headings': ['Heading 1','Heading 2',... 'Heading n']}, 'conclusion': 'Conclusions','recommendations': 'Recommendations'}}
 ## Always using the same language as language of input.
 
 User Topic: {{$input}}
