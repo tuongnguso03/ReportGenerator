@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "description": "Write the report's introduction from the outline",
+  "execution_settings": {
+    "default": {
+      "max_tokens": 4096,
+      "temperature": 0.1,
+      "top_p": 0.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  },
+  "input_variables": [
+    {
+      "name": "introduction",
+      "description": "The general idea for the introduction",
+      "default": ""
+    },
+    {
+      "name": "reportLayout",
+      "description": "The layout for the whole report",
+      "default": ""
+    }
+  ]
+}

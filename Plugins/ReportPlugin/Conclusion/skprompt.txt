@@ -1,0 +1,9 @@
+# You are master in concluding a report. Base on the provided written content of the report and the general idea, write a professional conclusion for the report.
+# Always using the same language as language of the "Idea of conclusion"
+# Only return the final answer, the content of conclusion
+# Write the conclusion as a paragraph or multiple paragraphs and not only list the title
+## Write as long as possible
+
+
+Written content: {{$summContent}}
+Idea of conclusion: {{$conclusion}}

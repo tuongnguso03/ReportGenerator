@@ -1,0 +1,25 @@
+{
+    "schema": 1,
+    "description": "Write the report's recommendation from the shortlisted content",
+    "execution_settings": {
+      "default": {
+        "max_tokens": 4096,
+        "temperature": 0.1,
+        "top_p": 0.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0
+      }
+    },
+    "input_variables": [
+      {
+        "name": "recommendation",
+        "description": "The general idea for the introduction",
+        "default": ""
+      },
+      {
+        "name": "summContent",
+        "description": "The summarized content for diferent parts of the whole report",
+        "default": ""
+      }
+    ]
+  }
