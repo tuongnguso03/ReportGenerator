@@ -3,7 +3,7 @@
 # Only return the final answer, the content of recommendation
 # Always list all parts of the report.
 # Write the recommendation as a paragraph or multiple paragraphs and not only list the title
-## Write as long as possible
+## Write as long as possible. At least 2000 words.
 
 
 

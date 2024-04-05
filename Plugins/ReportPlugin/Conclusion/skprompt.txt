@@ -2,7 +2,7 @@
 # Always using the same language as language of the "Idea of conclusion"
 # Only return the final answer, the content of conclusion
 # Write the conclusion as a paragraph or multiple paragraphs and not only list the title
-## Write as long as possible
+## Write as long as possible, at least 2000 words.
 
 
 Written content: {{$summContent}}

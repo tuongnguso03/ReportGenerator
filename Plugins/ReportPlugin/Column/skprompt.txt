@@ -4,7 +4,7 @@
 # Always use the same language as language of the "column's topic"
 # Base on the given information below write as long as possible a professional article using number and reasoning effectively about the topic of columns
 # MUST remain the order number of the columns because it will be merge with other parts later on.
-## Write as long as possible. You may make things up for the result to be long.
+## Write as long as possible. You may make things up for the result to be long. At least 2000 words.
 
 Context: {{$input}}
 
