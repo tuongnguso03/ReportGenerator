@@ -45,7 +45,7 @@ async def generate_report(title, kernel, plugin, google_plugin):
     #Get JSON outline
     while True: #Retry until format is correct
         try:
-            OutlineJSON = await kernel.invoke(OutlineJSON_function, sk.KernelArguments(input="Báo cáo thị trường Tiêu dùng năm 2023"))
+            OutlineJSON = await kernel.invoke(OutlineJSON_function, sk.KernelArguments(input=title))
             outline_dict = json_split(str(OutlineJSON))
             break
         except:
