@@ -4,8 +4,9 @@ import asyncio
 import roman
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
-from Plugins.utils import json_split, token_count
+from Plugins.utils import json_split, token_count, create_docx
 from Plugins.google_search import GoogleSearchPlugin
+
 
 TOKEN_LIMIT = 8000
 
@@ -36,6 +37,9 @@ async def columnist(heading, title, google_search_function, get_content_function
     return str(column), str(column_summ)
 
 async def generate_report(title, kernel, plugin, google_plugin):
+
+    column_headings = []
+    column_bodies = []
     #importing functions from plugins
     OutlineJSON_function = plugin["OutlineJSON"]
     google_search_function = google_plugin["GoogleSearch"]
@@ -57,7 +61,10 @@ async def generate_report(title, kernel, plugin, google_plugin):
     #write the introduction
     Introduction = await kernel.invoke(Introduction_function, sk.KernelArguments(introduction=outline_dict["introduction"]
                                                                             , reportLayout = str(OutlineJSON)))
-    introduction = "## " +roman.toRoman(1) + f". Introduction \n {str(Introduction)}"
+    introduction = "## " +roman.toRoman(1) + f". Mở Đầu \n {str(Introduction)}"
+    column_headings.append("Mở Đầu")
+    column_bodies.append(str(Introduction))
+
     # Write the body
     body = ""
     headings = outline_dict["body"]["headings"]
@@ -67,17 +74,27 @@ async def generate_report(title, kernel, plugin, google_plugin):
     values = await asyncio.gather(*coros)
     count = len(values) + 2
     for i in range(2, count):
-        body += "## " + roman.toRoman(i) + headings[i-2] + "\n" + values[i-2][0] +"\n"
+        body += "## " + roman.toRoman(i) + ". " + headings[i-2] + "\n" + values[i-2][0] +"\n"
+    column_headings += list(headings)
+    column_bodies += [value[0] for value in values]
     # Recommendation
     recommendation_function = plugin["Recommendation"]
     summContent = " ".join([value[1] for value in values])
     recommendation = await kernel.invoke(recommendation_function, sk.KernelArguments(recommendation = outline_dict["recommendations"], summContent = summContent))
-    recommendation = "## " + roman.toRoman(count) + ". Recommendations \n" + str(recommendation)
+    recommendation = "## " + roman.toRoman(count) + ". Khuyến Nghị \n" + str(recommendation)
+
+    column_headings.append("Khuyến Nghị")
+    column_bodies.append(str(recommendation))
     #Conclusion
     conclusion_function = plugin["Conclusion"]
     summContent = " ".join([value[1] for value in values])
     conclusion = await kernel.invoke(conclusion_function, sk.KernelArguments(conclusion = outline_dict["conclusion"], summContent = summContent))
-    conclusion = "## " +roman.toRoman(count+1) + ". Conclusion \n" + str(conclusion)
+    conclusion = "## " +roman.toRoman(count+1) + ". Tổng Kết \n" + str(conclusion)
+
+    column_headings.append("Tổng Kết")
+    column_bodies.append(str(conclusion))
+
+    bio = create_docx(title, column_headings, column_bodies) #bytesio object of the docx file
     return f"""
 # {title}
 
@@ -88,7 +105,7 @@ async def generate_report(title, kernel, plugin, google_plugin):
 {recommendation}
 
 {conclusion}
-"""
+""", bio
 
 
 st.write("""#""")
@@ -110,6 +127,7 @@ def initiate_kernel():
 kernel, plugin, google_plugin = initiate_kernel()
 
 async def main():
+    
     loaded_message = False
     with st.container():
         user_input = st.chat_input("Type something...")
@@ -120,11 +138,18 @@ async def main():
                 with st.chat_message(sender_name):
                     st.markdown(message)
             loaded_message = True
-            report = await generate_report(user_input, kernel, plugin, google_plugin)
+            report, bio = await generate_report(user_input, kernel, plugin, google_plugin)
             st.session_state["messages"].append(("Assistant", report))
             with st.chat_message("Assistant"):
                 st.markdown(report)
-        
+                if bio:
+                    st.download_button(
+                        label=f"{user_input}.docx",
+                        data=bio.getvalue(),
+                        file_name=f"{user_input}.docx",
+                        mime="docx"
+                    )
+                        
         if "messages" not in st.session_state:
             st.session_state["messages"] = [("Manager", "New Chat. Shall we start?")]
         if not loaded_message:
