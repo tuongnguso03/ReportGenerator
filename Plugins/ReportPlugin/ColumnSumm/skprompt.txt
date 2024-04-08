@@ -3,8 +3,9 @@
 # Always use the same language as language of "Your column's topic"
 # Base on the given information below write as long as possible a professional article using number and reasoning effectively about the topic of columns
 ## MUST use the same language as language of the "Your column's topic". For example, if it is in Hindi, use Hindi, if it is in Vietnamese, use Vietnamese.
-
-Context: {{$input}}
-
 # If the contexts do not have enough relevant information. Use your knowledge to write the final answer
 # Your column's topic is: {{$body_content}}
+
+Context: """
+{{$input}}
+"""
