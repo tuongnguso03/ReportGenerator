@@ -20,7 +20,7 @@ class GoogleSearchPlugin:
         ) -> Annotated[list[str], "The output is a list of urls"]:
         """Returns the list of urls that is related to the query."""
         try:
-            search_results = search(keyword, num=num_results, stop=num_results)
+            search_results = list(set(search(keyword, num=num_results, stop=num_results)))
             return search_results
         except Exception as e:
             print(f"An error occurred: {str(e)}")

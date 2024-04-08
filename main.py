@@ -9,10 +9,12 @@ from Plugins.google_search import GoogleSearchPlugin
 
 TOKEN_LIMIT = 8000
 
-async def columnist(heading, title, google_search_function, get_content_function, column_function, column_summ_function):
+async def columnist(heading, title, google_search_function, get_content_function, column_function, column_summ_function, query_function):
     search_result = []
     tokens = 0
-    search_result_urls = await kernel.invoke(google_search_function, sk.KernelArguments(keyword = heading + f"{title}", num_results = 15))
+
+    query = str(await kernel.invoke(query_function, sk.KernelArguments(input = heading, big_title = title)))
+    search_result_urls = await kernel.invoke(google_search_function, sk.KernelArguments(keyword = query, num_results = 15))
     search_result_urls = search_result_urls.value
     while True:
         if not search_result_urls:
@@ -40,8 +42,10 @@ async def generate_report(title, kernel, plugin, google_plugin):
     get_content_function = google_plugin["GetContentFromURL"]
 
     column_function = plugin["Column"]
+    query_function = plugin["Query"]
     Introduction_function = plugin["Introduction"]
     column_summ_function = plugin["ColumnSumm"]
+
     #Get JSON outline
     while True: #Retry until format is correct
         try:
@@ -59,7 +63,7 @@ async def generate_report(title, kernel, plugin, google_plugin):
     headings = outline_dict["body"]["headings"]
     coros = []
     for heading in headings:
-        coros.append(columnist(heading, outline_dict["title"], google_search_function, get_content_function, column_function, column_summ_function))
+        coros.append(columnist(heading, outline_dict["title"], google_search_function, get_content_function, column_function, column_summ_function, query_function))
     values = await asyncio.gather(*coros)
     count = len(values) + 2
     for i in range(2, count):

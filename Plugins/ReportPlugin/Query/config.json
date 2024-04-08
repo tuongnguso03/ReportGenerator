@@ -1,0 +1,25 @@
+{
+    "schema": 1,
+    "description": "Write a search query for the column.",
+    "execution_settings": {
+      "default": {
+        "max_tokens": 1024,
+        "temperature": 0.7,
+        "top_p": 0.0,
+        "presence_penalty": 0.0,
+        "frequency_penalty": 0.0
+      }
+    },
+    "input_variables": [
+      {
+        "name": "input",
+        "description": "The column's current focus",
+        "default": ""
+      },
+      {
+        "name": "big_title",
+        "description": "The document's topic",
+        "default": ""
+      }
+    ]
+  }
