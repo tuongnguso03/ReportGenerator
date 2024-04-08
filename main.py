@@ -2,6 +2,7 @@ from typing import Dict
 import streamlit as st
 import asyncio
 import roman
+import os
 import semantic_kernel as sk
 from semantic_kernel.connectors.ai.open_ai import OpenAIChatCompletion
 from Plugins.utils import json_split, token_count, create_docx
@@ -34,9 +35,15 @@ async def columnist(heading, title, google_search_function, get_content_function
     search_result = " ".join(search_result)
     column = await kernel.invoke(column_function, sk.KernelArguments(input = search_result, body_content = heading))
     column_summ = await kernel.invoke(column_summ_function, sk.KernelArguments(input = search_result, body_content = heading))
+
+    with st.chat_message("Assistant"):
+        st.markdown("## " + heading + "\n" + str(column) +"\n")
     return str(column), str(column_summ)
 
 async def generate_report(title, kernel, plugin, google_plugin):
+
+    with st.chat_message("Assistant"):
+        st.markdown("# "+ title)
 
     column_headings = []
     column_bodies = []
@@ -62,6 +69,9 @@ async def generate_report(title, kernel, plugin, google_plugin):
     Introduction = await kernel.invoke(Introduction_function, sk.KernelArguments(introduction=outline_dict["introduction"]
                                                                             , reportLayout = str(OutlineJSON)))
     introduction = "## " +roman.toRoman(1) + f". Mở Đầu \n {str(Introduction)}"
+
+    with st.chat_message("Assistant"):
+        st.markdown(introduction)
     column_headings.append("Mở Đầu")
     column_bodies.append(str(Introduction))
 
@@ -75,24 +85,31 @@ async def generate_report(title, kernel, plugin, google_plugin):
     count = len(values) + 2
     for i in range(2, count):
         body += "## " + roman.toRoman(i) + ". " + headings[i-2] + "\n" + values[i-2][0] +"\n"
+    
     column_headings += list(headings)
     column_bodies += [value[0] for value in values]
     # Recommendation
     recommendation_function = plugin["Recommendation"]
     summContent = " ".join([value[1] for value in values])
     recommendation = await kernel.invoke(recommendation_function, sk.KernelArguments(recommendation = outline_dict["recommendations"], summContent = summContent))
-    recommendation = "## " + roman.toRoman(count) + ". Khuyến Nghị \n" + str(recommendation)
-
     column_headings.append("Khuyến Nghị")
     column_bodies.append(str(recommendation))
+    recommendation = "## " + roman.toRoman(count) + ". Khuyến Nghị \n" + str(recommendation)
+    with st.chat_message("Assistant"):
+        st.markdown(recommendation)
+
+    
     #Conclusion
     conclusion_function = plugin["Conclusion"]
     summContent = " ".join([value[1] for value in values])
     conclusion = await kernel.invoke(conclusion_function, sk.KernelArguments(conclusion = outline_dict["conclusion"], summContent = summContent))
-    conclusion = "## " +roman.toRoman(count+1) + ". Tổng Kết \n" + str(conclusion)
-
     column_headings.append("Tổng Kết")
     column_bodies.append(str(conclusion))
+    conclusion = "## " +roman.toRoman(count+1) + ". Tổng Kết \n" + str(conclusion)
+    with st.chat_message("Assistant"):
+        st.markdown(conclusion)
+
+    
 
     bio = create_docx(title, column_headings, column_bodies) #bytesio object of the docx file
     return f"""
@@ -113,10 +130,10 @@ st.write("""#""")
 @st.cache_resource
 def initiate_kernel():
     kernel = sk.Kernel()
-    api_key, org_id = sk.openai_settings_from_dot_env()
+    api_key, _ = sk.openai_settings_from_dot_env()
     service_id = "default"
     kernel.add_service(
-        OpenAIChatCompletion(service_id=service_id, ai_model_id="gpt-3.5-turbo-0125", api_key=api_key, org_id=org_id),
+        OpenAIChatCompletion(service_id=service_id, ai_model_id="gpt-3.5-turbo-0125", api_key=api_key),
     )
 
     plugin = kernel.import_plugin_from_prompt_directory("./Plugins/", "ReportPlugin")
@@ -130,7 +147,7 @@ async def main():
     
     loaded_message = False
     with st.container():
-        user_input = st.chat_input("Type something...")
+        user_input = st.chat_input("Nhập nội dung cần làm báo cáo.")
         if user_input:
             # user_proxy.initiate_chat(manager, message = user_input, silent=True)
             st.session_state["messages"].append(("User", user_input))
@@ -141,7 +158,7 @@ async def main():
             report, bio = await generate_report(user_input, kernel, plugin, google_plugin)
             st.session_state["messages"].append(("Assistant", report))
             with st.chat_message("Assistant"):
-                st.markdown(report)
+                # st.markdown(report)
                 if bio:
                     st.download_button(
                         label=f"{user_input}.docx",
@@ -151,7 +168,7 @@ async def main():
                     )
                         
         if "messages" not in st.session_state:
-            st.session_state["messages"] = [("Manager", "New Chat. Shall we start?")]
+            st.session_state["messages"] = [("Manager", "Chào bạn.")]
         if not loaded_message:
             for sender_name, message in st.session_state["messages"]:
                 with st.chat_message(sender_name):
