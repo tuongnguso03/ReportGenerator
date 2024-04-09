@@ -64,6 +64,7 @@ class SKReport:
                                              sk.KernelArguments(
                                                  input = heading, 
                                                  big_title = self.outline_title,
+                                                 lang = self.lang
                                                  )
                                             )
                     )
