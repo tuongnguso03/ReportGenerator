@@ -15,6 +15,11 @@
         "name": "input",
         "description": "What the report should be about.",
         "default": ""
+      },
+      {
+        "name": "lang",
+        "description": "The report's language",
+        "default": ""
       }
     ]
   }

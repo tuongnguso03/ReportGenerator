@@ -20,6 +20,11 @@
         "name": "summContent",
         "description": "The summarized content for diferent parts of the whole report",
         "default": ""
+      },
+      {
+        "name": "lang",
+        "description": "The report's language",
+        "default": ""
       }
     ]
   }

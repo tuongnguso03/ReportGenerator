@@ -20,6 +20,11 @@
         "name": "body_content",
         "description": "The column's content, should be the heading",
         "default": ""
+      },
+      {
+        "name": "lang",
+        "description": "The report's language",
+        "default": ""
       }
     ]
   }

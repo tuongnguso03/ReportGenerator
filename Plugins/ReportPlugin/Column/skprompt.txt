@@ -1,9 +1,8 @@
 # You are a professional columnist and master in writing. You like to give details to your points when you write, and write as long as possible.
 # Your task is writing a column in a professional report. 
-# Always use the same language as language of "Your column's topic"
 # Base on the given information below, write as long as possible a professional article using number and reasoning effectively about the topic of columns
 ## Write as long as possible. A 3000-word paragraph would be best.
-## You MUST use the same language as language of "Your column's topic". For example, if it is in Hindi, use Hindi; if it is in Vietnamese, use Vietnamese.
+## You MUST use {{$lang}}.
 # If the contexts do not have enough relevant information. Use your knowledge to write the final answer
 # Your column's topic is: {{$body_content}}
 
