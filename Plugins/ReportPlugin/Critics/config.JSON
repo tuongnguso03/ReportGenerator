@@ -1,6 +1,6 @@
 {
     "schema": 1,
-    "description": "Write a JSON outline for the report",
+    "description": "Write a critic for current tasks",
     "execution_settings": {
       "default": {
         "max_tokens": 1024,
@@ -13,17 +13,12 @@
     "input_variables": [
       {
         "name": "input",
-        "description": "What the report should be about.",
+        "description": "The previous task's output.",
         "default": ""
       },
       {
-        "name": "lang",
-        "description": "The report's language",
-        "default": ""
-      },
-      {
-        "name": "critics",
-        "description": "Extra critics from previous trials that should be taken into consideration",
+        "name": "prompt",
+        "description": "The previous task's prompt",
         "default": ""
       }
     ]

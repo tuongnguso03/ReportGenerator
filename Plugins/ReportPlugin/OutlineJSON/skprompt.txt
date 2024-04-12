@@ -5,4 +5,7 @@
 {'report': {'title': 'Title of Report','introduction': 'Introduction content','body': {'headings': ['Heading 1','Heading 2',... 'Heading n']}, 'conclusion': 'Conclusions','recommendations': 'Recommendations'}}
 ## You MUST use {{$lang}}.
 # The topic should be fully elaborated in the body, in detail. Try to come up with many aspects (as headings) to introduce as possible. 6-8 headings would be best.
+{{$critics}}
+
 User Topic: {{$input}}
+

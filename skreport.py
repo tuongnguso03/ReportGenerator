@@ -36,15 +36,27 @@ class SKReport:
         self.recommendation_function = self.plugin["Recommendation"]
         self.conclusion_function = self.plugin["Conclusion"]
 
-    async def outlineGenerator(self):
+        self.critics_function = self.plugin["Critics"]
+
+    async def criticGenerator(self, prompt, input):
+        return await self.kernel.invoke(self.critics_function, 
+                                                sk.KernelArguments(
+                                                    input = input,
+                                                    prompt = prompt
+                                                    )
+                                                )
+    
+    async def outlineGenerator(self, critics = ""):
         while True: #Retry until format is correct
             try:
                 self.OutlineJSON = await self.kernel.invoke(self.OutlineJSON_function, 
-                                                       sk.KernelArguments(input=self.report_tile, lang = self.lang,))
+                                                       sk.KernelArguments(input=self.report_tile, lang = self.lang, critics = critics))
                 self.json_split()
                 break
             except:
                 continue
+    
+
 
     async def introGenerator(self):
         #write the introduction
