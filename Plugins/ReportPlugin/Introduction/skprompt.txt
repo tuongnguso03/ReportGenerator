@@ -7,3 +7,5 @@
 
 Report layout: {{$reportLayout}}
 Idea of introduction: {{$introduction}}
+
+{{$critics}}

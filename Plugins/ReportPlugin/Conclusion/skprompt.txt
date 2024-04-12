@@ -9,3 +9,5 @@ Idea of conclusion: {{$conclusion}}
 
 ## You MUST use {{$lang}}.
 
+{{$critics}}
+

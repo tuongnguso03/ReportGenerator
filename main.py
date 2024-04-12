@@ -27,6 +27,7 @@ async def main():
             with st.chat_message("Assistant"):
                 st.markdown(ReportGen.outline_dict)
                 st.session_state["messages"].append(("Assistant", ReportGen.outline_dict))
+            #Critics
             with st.spinner('Critics for Outline - Generating...'):
                 critics = await ReportGen.criticGenerator(input=ReportGen.OutlineJSON, 
                                                           prompt=ReportGen.OutlineJSON_function.prompt_template.prompt_template_config.template
@@ -34,6 +35,7 @@ async def main():
             with st.chat_message("Critics"):
                 st.markdown(critics)
                 st.session_state["messages"].append(("Critics", critics))
+            # Rewriting
             with st.spinner('Outline - Generating...'):
                 await ReportGen.outlineGenerator(critics=critics)
             with st.chat_message("Assistant"):
@@ -44,7 +46,24 @@ async def main():
                 await ReportGen.introGenerator()
             ReportGen.report_headings.append("Mở Đầu")
             ReportGen.report_bodies.append(str(ReportGen.introContent))
-# Print out Introduction
+            with st.chat_message("Assistant"):
+                introduction = "## " +roman.toRoman(1) + f". Mở Đầu \n {str(ReportGen.introContent)}"
+                st.markdown(introduction)
+                st.session_state["messages"].append(("Assistant", introduction))
+
+            #Critics
+            with st.spinner('Critics for Introduction - Generating...'):
+                critics = await ReportGen.criticGenerator(input=ReportGen.introContent, 
+                                                          prompt=ReportGen.Introduction_function.prompt_template.prompt_template_config.template
+                                                          )
+            with st.chat_message("Critics"):
+                st.markdown(critics)
+                st.session_state["messages"].append(("Critics", critics))
+            # Rewrite
+            with st.spinner('Introduction - Generating...'):
+                await ReportGen.introGenerator(critics=critics)
+            ReportGen.report_headings.append("Mở Đầu")
+            ReportGen.report_bodies.append(str(ReportGen.introContent))
             with st.chat_message("Assistant"):
                 introduction = "## " +roman.toRoman(1) + f". Mở Đầu \n {str(ReportGen.introContent)}"
                 st.markdown(introduction)
@@ -55,13 +74,31 @@ async def main():
                 with st.spinner(f'Heading {i+1}/{len(ReportGen.outline_headings)} - Generating...'):
                     column, column_summ =await ReportGen.columnist(heading)
                 summContent += column_summ + "\n\n"
-                ReportGen.report_headings.append(heading)
-                ReportGen.report_bodies.append(column)
                 ## Print out content of each Heading
                 with st.chat_message("Assistant"):
                     heading_print = "## " + roman.toRoman(i+2) + ". " + heading + "\n" + column +"\n"
                     st.markdown(heading_print)
                     st.session_state["messages"].append(("Assistant", heading_print))
+                ## Critics
+                with st.spinner(f'Critics for {heading} - Generating...'):
+                    critics = await ReportGen.criticGenerator(input=column, 
+                                                          prompt=ReportGen.column_function.prompt_template.prompt_template_config.template + "\n Current topic is: " + heading
+                                                          )
+                with st.chat_message("Critics"):
+                    st.markdown(critics)
+                    st.session_state["messages"].append(("Critics", critics))
+                ## Rewrite
+                with st.spinner(f'Heading {i+1}/{len(ReportGen.outline_headings)} - Generating...'):
+                    column, column_summ =await ReportGen.columnist(heading, critics=critics)
+                summContent += column_summ + "\n\n"
+                ## Print out content of each Heading
+                with st.chat_message("Assistant"):
+                    heading_print = "## " + roman.toRoman(i+2) + ". " + heading + "\n" + column +"\n"
+                    st.markdown(heading_print)
+                    st.session_state["messages"].append(("Assistant", heading_print))
+
+                ReportGen.report_headings.append(heading)
+                ReportGen.report_bodies.append(column)
 
 # Conclusion Generator
             with st.spinner(f'Conclusion - Generating...'):
@@ -73,9 +110,43 @@ async def main():
                 st.markdown(conclusion_print)
                 st.session_state["messages"].append(("Assistant", conclusion_print))
 
+            with st.spinner('Critics for Introduction - Generating...'):
+                critics = await ReportGen.criticGenerator(input=ReportGen.conclusionContent, 
+                                                          prompt=ReportGen.conclusion_function.prompt_template.prompt_template_config.template
+                                                          )
+            with st.chat_message("Critics"):
+                st.markdown(critics)
+                st.session_state["messages"].append(("Critics", critics))
+
+            with st.spinner(f'Conclusion - Generating...'):
+                await ReportGen.conclusionGenerator(summContent, critics)
+            ReportGen.report_headings.append("Kết luận")
+            ReportGen.report_bodies.append(ReportGen.conclusionContent)
+            with st.chat_message("Assistant"):
+                conclusion_print = "## " + roman.toRoman(1 + len(ReportGen.outline_headings)) + ". " + "Kết luận" + "\n" + str(ReportGen.conclusionContent) +"\n"
+                st.markdown(conclusion_print)
+                st.session_state["messages"].append(("Assistant", conclusion_print))
+
 # Recommendation Generator
             with st.spinner(f'Recommendation - Generating...'):
                 await ReportGen.recommendGenerator(summContent)
+            ReportGen.report_headings.append("Kiến nghị")
+            ReportGen.report_bodies.append(ReportGen.recommendContent)
+            with st.chat_message("Assistant"):
+                recom_print = "## " + roman.toRoman(2 + len(ReportGen.outline_headings)) + ". " + "Kiến nghị" + "\n" + str(ReportGen.recommendContent) +"\n"
+                st.markdown(recom_print)
+                st.session_state["messages"].append(("Assistant", recom_print))
+
+            with st.spinner('Critics for Introduction - Generating...'):
+                critics = await ReportGen.criticGenerator(input=ReportGen.recommendContent, 
+                                                          prompt=ReportGen.recommendation_function.prompt_template.prompt_template_config.template
+                                                          )
+            with st.chat_message("Critics"):
+                st.markdown(critics)
+                st.session_state["messages"].append(("Critics", critics))
+
+            with st.spinner(f'Recommendation - Generating...'):
+                await ReportGen.recommendGenerator(summContent, critics=critics)
             ReportGen.report_headings.append("Kiến nghị")
             ReportGen.report_bodies.append(ReportGen.recommendContent)
             with st.chat_message("Assistant"):

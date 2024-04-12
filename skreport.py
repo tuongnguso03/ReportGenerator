@@ -58,17 +58,18 @@ class SKReport:
     
 
 
-    async def introGenerator(self):
+    async def introGenerator(self, critics = ""):
         #write the introduction
         self.introContent = await self.kernel.invoke(self.Introduction_function, 
                                                 sk.KernelArguments(
                                                     introduction=self.outline_intro,
                                                     reportLayout = self.outline_dict,
-                                                    lang = self.lang
+                                                    lang = self.lang,
+                                                    critics = critics
                                                     )
                                                 )
 
-    async def columnist(self, heading:str, num_results:int=10):
+    async def columnist(self, heading:str, num_results:int=10, critics = ""):
         search_result = []
         tokens = 0
 
@@ -76,7 +77,8 @@ class SKReport:
                                              sk.KernelArguments(
                                                  input = heading, 
                                                  big_title = self.outline_title,
-                                                 lang = self.lang
+                                                 lang = self.lang,
+                                                 critics = ""
                                                  )
                                             )
                     )
@@ -111,7 +113,8 @@ class SKReport:
                                           sk.KernelArguments(
                                               input = search_result, 
                                               body_content = heading,
-                                              lang = self.lang
+                                              lang = self.lang,
+                                              critics = critics
                                               )
                                         )
         column_summ = await self.kernel.invoke(self.column_summ_function, 
@@ -124,22 +127,24 @@ class SKReport:
         
         return str(column), str(column_summ)
 
-    async def recommendGenerator(self, summContent):
+    async def recommendGenerator(self, summContent, critics = ""):
         self.recommendContent = str(await self.kernel.invoke(self.recommendation_function, 
                                                          sk.KernelArguments(
                                                              recommendation = self.outline_recommendations, 
                                                              summContent = summContent,
-                                                             lang = self.lang
+                                                             lang = self.lang,
+                                                             critics = critics
                                                              )
                                                         )
                                     )
     
-    async def conclusionGenerator(self, summContent):
+    async def conclusionGenerator(self, summContent, critics = ""):
         self.conclusionContent = str(await self.kernel.invoke(self.conclusion_function, 
                                                           sk.KernelArguments(
                                                             conclusion = self.outline_conclusion,
                                                             summContent = summContent,
-                                                            lang = self.lang
+                                                            lang = self.lang,
+                                                            critics = critics
                                                             )
                                                         )
                                     )

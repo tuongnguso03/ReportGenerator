@@ -10,3 +10,5 @@
 Context: """
 {{$input}}
 """
+
+{{$critics}}

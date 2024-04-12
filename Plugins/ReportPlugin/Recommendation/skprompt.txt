@@ -8,3 +8,5 @@
 Context: """
 {{$summContent}}
 """
+
+{{$critics}}

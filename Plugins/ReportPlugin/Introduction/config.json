@@ -25,6 +25,11 @@
       "name": "lang",
       "description": "The report's language",
       "default": ""
+    },
+    {
+      "name": "critics",
+      "description": "Extra critics from previous trials that should be taken into consideration",
+      "default": ""
     }
   ]
 }
