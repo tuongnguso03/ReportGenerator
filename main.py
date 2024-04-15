@@ -82,7 +82,7 @@ async def main():
                 ## Critics
                 with st.spinner(f'Critics for {heading} - Generating...'):
                     critics = await ReportGen.criticGenerator(input=column, 
-                                                          prompt=ReportGen.column_function.prompt_template.prompt_template_config.template + "\n Current topic is: " + heading
+                                                          prompt=str(ReportGen.column_function.prompt_template.prompt_template_config.template).replace("{{$body_content}}", heading)
                                                           )
                 with st.chat_message("Critics"):
                     st.markdown(critics)

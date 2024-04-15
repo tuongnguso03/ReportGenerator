@@ -3,11 +3,11 @@
 # Write the conclusion as a paragraph or multiple paragraphs and not only list the title
 ## Write as long as possible, at least 2000 words.
 
+{{$critics}}
 
 Written content: {{$summContent}}
 Idea of conclusion: {{$conclusion}}
 
 ## You MUST use {{$lang}}.
 
-{{$critics}}
 

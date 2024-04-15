@@ -6,9 +6,9 @@
 # If the contexts do not have enough relevant information. Use your knowledge to write the final answer
 # Your column's topic is: {{$body_content}}
 
+{{$critics}}
 
 Context: """
 {{$input}}
 """
 
-{{$critics}}

@@ -4,9 +4,10 @@
 ## Write as long as possible. At least 2000 words.
 # Idea of recommendation: {{$recommendation}}
 ## You MUST use {{$lang}}.
+{{$critics}}
+
 
 Context: """
 {{$summContent}}
 """
 
-{{$critics}}

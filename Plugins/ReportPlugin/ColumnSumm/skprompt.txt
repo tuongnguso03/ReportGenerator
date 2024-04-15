@@ -2,7 +2,6 @@
 # Your task is writing a column in a professional report. 
 # Base on the given information below write as long as possible a professional article using number and reasoning effectively about the topic of columns
 ## You MUST use {{$lang}}.
-# If the contexts do not have enough relevant information. Use your knowledge to write the final answer
 # Your column's topic is: {{$body_content}}
 
 Context: """
